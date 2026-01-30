@@ -91,4 +91,26 @@ process.on('SIGTERM', () => {
   });
 });
 
+// Роуты
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/chats', require('./routes/chats'));
+app.use('/api/messages', require('./routes/messages'));
+app.use('/api/uploads', require('./routes/uploads'));
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Error Handler — обязательно ПОСЛЕ роутов
+app.use(errorHandler);
+
+// 404 Handler — ПОСЛЕ errorHandler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Маршрут не найден' });
+});
+
+
 module.exports = { app, server, io };
+
