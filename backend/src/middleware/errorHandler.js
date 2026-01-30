@@ -53,4 +53,16 @@ const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// middleware/errorHandler.js
+
+module.exports = (err, req, res, next) => {
+  console.error(err.stack || err); // логируем ошибку в консоль
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Внутренняя ошибка сервера'
+  });
+};
+
+
 module.exports = { errorHandler, asyncHandler };
+
